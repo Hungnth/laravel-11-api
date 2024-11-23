@@ -15,6 +15,16 @@ class BlogController extends Controller
         return response()->json($posts, 200);
     }
 
+    public function search(Request $request)
+    {
+        if ($request->has('q')) {
+            $post = Blog::where('title', 'like', '%'. $request->q . '%')->get();
+            return response()->json($post, 200);
+        }
+        return response()->json([], 200);
+    }
+
+
     public function store(BlogStoreRequest $request)
     {
         $post = new Blog();
@@ -26,6 +36,12 @@ class BlogController extends Controller
         return response()->json($post, 201);
     }
 
+    public function show($id)
+    {
+        $post = Blog::findOrFail($id);
+        return response()->json($post, 200);
+    }
+
     public function update(BlogStoreRequest $request, $id)
     {
         $post = Blog::findOrfail($id);
@@ -35,5 +51,13 @@ class BlogController extends Controller
         $post->save();
 
         return response()->json(['message' => "Blog updated successfully"], 200);
+    }
+
+    public function destroy($id)
+    {
+        $post = Blog::findOrfail($id);
+        $post->delete();
+
+        return response()->json(['message' => "Blog deleted successfully"], 200);
     }
 }

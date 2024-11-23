@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\BlogController;
+use App\Http\Controllers\Api\V1\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -9,7 +10,13 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::group(['prefix' => 'v1'], function () {
+    Route::get('blogs/search', [BlogController::class, 'search']);
+
     Route::get('blogs', [BlogController::class, 'index']);
     Route::post('blogs', [BlogController::class, 'store']);
     Route::put('blogs/{id}', [BlogController::class, 'update']);
+    Route::get('blogs/{id}', [BlogController::class, 'show']);
+    Route::delete('blogs/{id}', [BlogController::class, 'destroy']);
+
+    Route::apiResource('tests', TestController::class);
 });
